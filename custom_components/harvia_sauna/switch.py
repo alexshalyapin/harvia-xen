@@ -32,7 +32,7 @@ class HarviaPowerSwitch(SwitchEntity):
         return self._device_id
 
     async def async_added_to_hass(self):
-        """Acties die uitgevoerd moeten worden als entiteit aan HA is toegevoegd."""
+        """Действия, которые необходимо выполнить при добавлении объекта в HA."""
         self._device.powerSwitch = self
         await self._device.update_ha_devices()
 
@@ -71,7 +71,7 @@ class HarviaLightSwitch(SwitchEntity):
 
 
     async def async_added_to_hass(self):
-        """Acties die uitgevoerd moeten worden als entiteit aan HA is toegevoegd."""
+        """Действия, которые необходимо выполнить при добавлении объекта в HA."""
         self._device.lightSwitch = self
         await self._device.update_ha_devices()
         #self._device.
@@ -94,12 +94,12 @@ class HarviaLightSwitch(SwitchEntity):
         return self._device_id
 
     async def async_turn_on(self, **kwargs):
-        # Code om de sauna aan te zetten
+        # Код для включения сауны
         await self._device.set_lights(True)
         self._is_on = True
 
     async def async_turn_off(self, **kwargs):
-        # Code om de sauna uit te zetten
+        # Код для выключения сауны
         await self._device.set_lights(False)
         self._is_on = False
 
@@ -115,7 +115,7 @@ class HarviaSteamerSwitch(SwitchEntity):
 
 
     async def async_added_to_hass(self):
-        """Acties die uitgevoerd moeten worden als entiteit aan HA is toegevoegd."""
+        """Действия, которые необходимо выполнить при добавлении объекта в HA."""
         self._device.steamerSwitch = self
         await self._device.update_ha_devices()
         #self._device.
@@ -159,7 +159,7 @@ class HarviaFanSwitch(SwitchEntity):
 
 
     async def async_added_to_hass(self):
-        """Acties die uitgevoerd moeten worden als entiteit aan HA is toegevoegd."""
+        """Действия, которые необходимо выполнить при добавлении объекта в HA."""
         self._device.fanSwitch = self
         await self._device.update_ha_devices()
         #self._device.
@@ -182,7 +182,7 @@ class HarviaFanSwitch(SwitchEntity):
         return self._device_id
 
     async def async_turn_on(self, **kwargs):
-        # Code om de sauna aan te zetten
+        # Код для включения сауны
         await self._device.set_fan(True)
         self._is_on = True
 
@@ -193,8 +193,8 @@ class HarviaFanSwitch(SwitchEntity):
 
 async def async_setup_entry(hass, entry, async_add_entities):
     """Set up de Harvia switches."""
-    # Hier zou je de logica toevoegen om je apparaten op te halen.
-    # Voor nu voegen we handmatig een schakelaar toe als voorbeeld.
+    # Здесь вы можете добавить логику для извлечения ваших устройств.
+    # Сейчас мы вручную добавим переключатель в качестве примера.
     devices = await hass.data[DOMAIN]['api'].get_devices()
     switches = []
 
