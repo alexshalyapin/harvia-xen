@@ -3,10 +3,10 @@ from homeassistant.const import PERCENTAGE
 from .constants import DOMAIN, STORAGE_KEY, STORAGE_VERSION, REGION,_LOGGER
 
 class HarviaHumiditySensor(SensorEntity):
-    """Representatie van een vochtigheidssensor."""
+    """Представление датчика влажности."""
 
     def __init__(self, device, name, sauna):
-        """Initialiseer de humidity sensor."""
+        """Инициализация датчика влажности."""
         self._name = name + ' Humidity'
         self._state = None
         self._device = device
@@ -17,7 +17,7 @@ class HarviaHumiditySensor(SensorEntity):
 
     @property
     def name(self):
-        """Return de naam van de sensor."""
+        """Верните имя датчика."""
         return self._name
 
     @property
@@ -27,11 +27,11 @@ class HarviaHumiditySensor(SensorEntity):
 
     @property
     def unit_of_measurement(self):
-        """Return de eenheid die wordt gebruikt."""
+        """Верните использованную единицу."""
         return PERCENTAGE
 
     async def async_added_to_hass(self):
-        """Acties die uitgevoerd moeten worden als entiteit aan HA is toegevoegd."""
+        """Действия, которые необходимо выполнить при добавлении объекта в HA."""
         self._device.humiditySensor = self
         await self._device.update_ha_devices()
 
@@ -41,7 +41,7 @@ class HarviaHumiditySensor(SensorEntity):
 
     #@property
     #def device_info(self):
-    #    """Return informatie over het aangesloten apparaat."""
+    #    """Возврат информации о подключенном устройстве."""
     #    return {
     #        "identifiers": {(DOMAIN, self._device.id)},
     #        "name": self._device.name,
@@ -49,13 +49,13 @@ class HarviaHumiditySensor(SensorEntity):
     #    }
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    """Set up de Harvia sensors."""
+    """Настройка датчиков de Harvia."""
     devices = await hass.data[DOMAIN]['api'].get_devices()
-    all_sensors = []  # Gebruik een andere variabele om verwarring te voorkomen
+    all_sensors = []  # Используйте другую переменную, чтобы избежать путаницы.
 
     for device in devices:
         _LOGGER.debug(f"Loading sensors for device: {device.name}")
-        device_sensors = await device.get_sensors()  # Verkrijg  sensors voor het huidige apparaat
-        all_sensors.extend(device_sensors)  # Voeg de verkregen sensors toe aan de lijst
+        device_sensors = await device.get_sensors()  # Получить датчики для текущего устройства
+        all_sensors.extend(device_sensors)  # Добавьте полученные датчики в список
 
     async_add_entities(all_sensors, True)
