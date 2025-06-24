@@ -3,10 +3,10 @@ from homeassistant.const import PERCENTAGE
 from .constants import DOMAIN, STORAGE_KEY, STORAGE_VERSION, REGION,_LOGGER
 
 class HarviaHumiditySetPoint(NumberEntity):
-    """Representatie van een nummer entiteit om de gewenste vochtigheid in te stellen."""
+    """Представление числового объекта для установки желаемой влажности."""
 
     def __init__(self, device, name, sauna):
-        """Initialiseer de humidity number set point."""
+        """Инициализация заданного значения влажности."""
         self._name = name + ' Steamer Humidity'
         self._state = None
         self._device = device
@@ -17,37 +17,37 @@ class HarviaHumiditySetPoint(NumberEntity):
 
     @property
     def name(self):
-        """Return de naam van de entiteit."""
+        """Верните имя сущности."""
         return self._name
 
 
     @property
     def min_value(self):
-        """Return het minimum waarde van de vochtigheid die kan worden ingesteld."""
+        """Возвращает минимальное значение влажности, которое можно установить.."""
         return 0  # Stel in op je minimum grenswaarde
 
     @property
     def max_value(self):
-        """Return het maximum waarde van de vochtigheid die kan worden ingesteld."""
-        return 140  # Stel in op je maximum grenswaarde
+        """Возвращает максимальное значение влажности, которое можно установить.."""
+        return 140  # Установите максимальное предельное значение( темп+влажность)
 
     @property
     def step(self):
-        """Return de stapgrootte van de vochtigheidsinstelling."""
+        """Верните размер шага настройки влажности."""
         return 1.0
 
     @property
     def unit_of_measurement(self):
-        """Return de eenheid van deze entiteit."""
+        """Верните единицу этой сущности."""
         return PERCENTAGE
 
     @property
     def value(self):
-        """Return de huidige ingestelde waarde."""
+        """Верните текущее установленное значение."""
         return self._state
 
     async def async_added_to_hass(self):
-        """Acties die uitgevoerd moeten worden als entiteit aan HA is toegevoegd."""
+        """Действия, которые необходимо выполнить при добавлении объекта в HA."""
         self._device.humidityNumber = self
         await self._device.update_ha_devices()
 
@@ -55,19 +55,19 @@ class HarviaHumiditySetPoint(NumberEntity):
         self.async_write_ha_state()
 
     async def async_set_value(self, value):
-        """Update de ingestelde waarde."""
+        """Обновить установленное значение."""
         self._state = value
         await self._device.set_target_relative_humidity(value)
         self.async_write_ha_state()
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    """Set up de Harvia numbers."""
+    """Настройка номеров de Harvia."""
     devices = await hass.data[DOMAIN]['api'].get_devices()
-    all_numbers = []  # Gebruik een andere variabele om verwarring te voorkomen
+    all_numbers = []  # Используйте другую переменную, чтобы избежать путаницы.
 
     for device in devices:
         _LOGGER.debug(f"Loading sensors for device: {device.name}")
-        device_numbers = await device.get_numbers()  # Verkrijg  sensors voor het huidige apparaat
-        all_numbers.extend(device_numbers)  # Voeg de verkregen sensors toe aan de lijst
+        device_numbers = await device.get_numbers()  # Получить датчики для текущего устройства
+        all_numbers.extend(device_numbers)  # Добавьте полученные датчики в список
 
     async_add_entities(all_numbers, True)
